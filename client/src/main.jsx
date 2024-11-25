@@ -10,11 +10,21 @@ import Homepage from './pages/Homepage.jsx';
 import PostListPage from './pages/PostListPage.jsx';
 import Write from './pages/Write.jsx';
 import LoginPage from './pages/LoginPage.jsx';
-import SignInPage from './pages/SignInPage.jsx';
+import SignUpPage from './pages/SignUpPage.jsx';
 import SinglePostPage from './pages/SinglePostPage.jsx';
 
 // ------------- MAIN LAYOUT PAGE -------------
 import MainLayout from './layouts/MainLayout.jsx';
+
+// ------------- CLERK AUTH -------------
+import { ClerkProvider } from '@clerk/clerk-react';
+
+// ------------- CLERK AUTH -------------
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error('Missing Publishable Key');
+}
 
 const router = createBrowserRouter([
   {
@@ -42,7 +52,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/register',
-        element: <SignInPage />,
+        element: <SignUpPage />,
       },
     ],
   },
@@ -50,6 +60,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+      <RouterProvider router={router} />
+    </ClerkProvider>
   </StrictMode>
 );
