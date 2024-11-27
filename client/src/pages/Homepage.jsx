@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom';
+import MainCategories from '../components/MainCategories';
+import FeaturedPosts from '../components/FeaturedPosts';
+import PostList from '../components/PostList';
 
 export default function Homepage() {
   return (
@@ -22,7 +25,7 @@ export default function Homepage() {
           </p>
         </div>
         {/* animated button */}
-        <Link to="/write" className='hidden md:block relative'>
+        <Link to="/write" className="hidden md:block relative">
           <svg
             viewBox="0 0 200 200"
             width="200"
@@ -59,8 +62,15 @@ export default function Homepage() {
           </button>
         </Link>
       </div>
+      {/* -------- CATEGORIES -------- */}
+      <MainCategories />
       {/* -------- FEATURED POST -------- */}
+      <FeaturedPosts />
       {/* -------- POST LIST -------- */}
+      <div className="">
+        <h1 className="my-8 text-2xl text-gray-600">Recent Posts</h1>
+        <PostList />
+      </div>
     </div>
   );
 }
