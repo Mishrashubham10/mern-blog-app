@@ -8,6 +8,9 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 
+// MIDDLEWARES
+app.use(express.json())
+
 // ROUTES
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
