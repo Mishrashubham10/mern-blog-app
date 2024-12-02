@@ -1,4 +1,5 @@
 import Post from '../models/post.model.js';
+import User from '../models/user.model.js';
 
 // @GET POSTS
 // ROUTE GET
@@ -27,7 +28,19 @@ const getPost = async (req, res) => {
 // @ROUTE POST
 // @METHOD : CREATE POST
 const createPost = async (req, res) => {
-  const newPost = new Post(req.body);
+  const clerkUserId = req.auth.userId;
+
+  if (!clerkUserId) {
+    return res.status(401).json('Not authenticated');
+  }
+
+  const user = await User.findOne({ clerkUserId });
+
+  if (!user) {
+    res.status(404).json('User not found');
+  }
+
+  const newPost = new Post({ user: user._id, ...req.body });
 
   const post = await newPost.save();
 
@@ -38,10 +51,13 @@ const createPost = async (req, res) => {
 // @METHOD : DELETE POST
 const deletePost = async (req, res) => {
   const id = req.params.id;
+  const clerkUserId = req.auth.userId;
 
   if (!id) return res.status(400).json({ message: 'Id is required' });
 
-  const post = await Post.findByIdAndDelete(id);
+  const user = await User.findOne({ clerkUserId });
+
+  const post = await Post.findByIdAndDelete({ _id: id, user: user._id });
 
   res.status(200).json('Post has been deleted');
 };
